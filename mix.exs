@@ -33,7 +33,7 @@ defmodule UseCase.MixProject do
 
   defp package do
     [
-      name: :phoenix_up,
+      name: :use_case,
       maintainers: ["Henrique Fernandez Teixeira"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/henriquefernandez/use_case"}
