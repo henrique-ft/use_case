@@ -1,4 +1,4 @@
-![PhoenixUp](https://raw.githubusercontent.com/henriquefernandez/use_case/master/priv/static/logo_small.png)
+![PhoenixUp](https://raw.githubusercontent.com/henriquefernandez/use_case/master/priv/static/small_logo.png)
 
 # UseCase
 
