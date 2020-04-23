@@ -1,13 +1,28 @@
-![PhoenixUp](https://raw.githubusercontent.com/henriquefernandez/use_case/master/priv/static/logo.png)
+![PhoenixUp](https://raw.githubusercontent.com/henriquefernandez/use_case/master/priv/static/logo_small.png)
 
 # UseCase
 
-**TODO: Add description**
+A different approach for Elixir projects structure.
+
+```elixir
+defmodule SayHello do
+  @moduledoc """
+    My great use case
+  """
+  use UseCase,
+    input: [:name],
+    output: [:message]
+
+  def call(%{name: name}, _opts), do: ok(message: "Hello #{name}!")
+end
+
+UseCase.call %SayHello{name: "Henrique"}
+# {:ok, %SayHello.Output{message: "Hello Henrique!"}}
+```
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `use_case` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `use_case` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
