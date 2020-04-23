@@ -9,7 +9,7 @@ defmodule UseCase.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
-      description: "An use case approach and generators for Elixir projects.",
+      description: "A different approach for Elixir projects structure.",
       package: package(),
       docs: [logo: "priv/static/logo.png", extras: ["README.md"], main: "readme"],
       name: "UseCase",
@@ -36,7 +36,7 @@ defmodule UseCase.MixProject do
       name: :phoenix_up,
       maintainers: ["Henrique Fernandez Teixeira"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/henriquefernandez/phoenix_up"}
+      links: %{"GitHub" => "https://github.com/henriquefernandez/use_case"}
     ]
   end
 end
