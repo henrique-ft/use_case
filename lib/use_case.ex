@@ -7,6 +7,8 @@ defmodule UseCase do
 
   def call(%interactor{} = input), do: interactor.call(input, [])
 
+  def call(interactor) when is_atom(interactor), do: interactor.call(%{}, [])
+
   def call!(interactor, input, opts) when is_atom(interactor),
     do: interactor.call(input, opts) |> bang!
 

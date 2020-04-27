@@ -4,7 +4,7 @@ defmodule UseCaseTest do
 
   defmodule FakeInteractor do
     @moduledoc """
-      My use case
+      My interactor
     """
     use UseCase.Interactor,
       input: [:some_value],
@@ -23,6 +23,8 @@ defmodule UseCaseTest do
       ok(some_result: "result")
     end
 
+    def call(%{} = input, opts), do: send(self(), {input, opts})
+
     def call(input, opts) do
       send(self(), {input, opts})
 
@@ -31,23 +33,29 @@ defmodule UseCaseTest do
   end
 
   describe "UseCase.call/1" do
-    test "it call's usecase with correct params and opts" do
+    test "it call's interactor with correct params and opts" do
       result = UseCase.call(%FakeInteractor{some_value: "test"})
 
       assert_received {%FakeInteractor{some_value: "test"}, []}
       assert result == {:ok, %FakeInteractor.Output{some_result: "result"}}
     end
+
+    test "if single atom given, it calls interactor with empty params" do
+      UseCase.call(FakeInteractor)
+
+      assert_received {%{}, []}
+    end
   end
 
   describe "UseCase.call/2" do
-    test "it call's usecase with correct params and opts" do
+    test "it call's interactor with correct params and opts" do
       result = UseCase.call(%FakeInteractor{some_value: "test"}, "opts")
 
       assert_received {%FakeInteractor{some_value: "test"}, "opts"}
       assert result == {:ok, %FakeInteractor.Output{some_result: "result"}}
     end
 
-    test "it call's usecase with correct params" do
+    test "it call's interactor with correct params" do
       result = UseCase.call(FakeInteractor, "params")
 
       assert_received {"params", []}
@@ -56,7 +64,7 @@ defmodule UseCaseTest do
   end
 
   describe "UseCase.call/3" do
-    test "it call's usecase with correct params and opts" do
+    test "it call's interactor with correct params and opts" do
       result = UseCase.call(FakeInteractor, "params", "opts")
 
       assert_received {"params", "opts"}
@@ -65,7 +73,7 @@ defmodule UseCaseTest do
   end
 
   describe "UseCase.call errors" do
-    test "its raises an usecase error" do
+    test "its raises an interactor error" do
       result = UseCase.call(%FakeInteractor{some_value: "wrong_value"})
 
       assert_received {%FakeInteractor{some_value: "wrong_value"}, []}
@@ -74,23 +82,29 @@ defmodule UseCaseTest do
   end
 
   describe "UseCase.call!/1" do
-    test "it call's usecase with correct params and opts" do
+    test "it call's interactor with correct params and opts" do
       result = UseCase.call!(%FakeInteractor{some_value: "test"})
 
       assert_received {%FakeInteractor{some_value: "test"}, []}
       assert result == %FakeInteractor.Output{some_result: "result"}
     end
+
+    test "if single atom given, it calls interactor with empty params" do
+      UseCase.call(FakeInteractor)
+
+      assert_received {%{}, []}
+    end
   end
 
   describe "UseCase.call!/2" do
-    test "it call's usecase with correct params and opts" do
+    test "it call's interactor with correct params and opts" do
       result = UseCase.call!(%FakeInteractor{some_value: "test"}, "opts")
 
       assert_received {%FakeInteractor{some_value: "test"}, "opts"}
       assert result == %FakeInteractor.Output{some_result: "result"}
     end
 
-    test "it call's usecase with correct params" do
+    test "it call's interactor with correct params" do
       result = UseCase.call!(FakeInteractor, "params")
 
       assert_received {"params", []}
@@ -99,7 +113,7 @@ defmodule UseCaseTest do
   end
 
   describe "UseCase.call!/3" do
-    test "it call's usecase with correct params and opts" do
+    test "it call's interactor with correct params and opts" do
       result = UseCase.call!(FakeInteractor, "params", "opts")
 
       assert_received {"params", "opts"}
@@ -108,7 +122,7 @@ defmodule UseCaseTest do
   end
 
   describe "UseCase.call! errors" do
-    test "its raises an usecase error" do
+    test "its raises an interactor error" do
       assert_raise FakeInteractor.Error, fn ->
         UseCase.call!(%FakeInteractor{some_value: "wrong_value"})
       end
