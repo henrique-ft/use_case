@@ -1,4 +1,40 @@
 defmodule UseCase do
+  def pipe([interactor | _] = interactors, input, opts) when is_atom(interactor),
+    do: pipe_loop(interactors, input, opts)
+
+  def pipe([interactor | _] = interactors, input) when is_atom(interactor),
+    do: pipe_loop(interactors, input, [])
+
+  def pipe(interactors, opts), do: pipe_loop(interactors, opts)
+  def pipe(interactors), do: pipe_loop(interactors, [])
+
+  def pipe_loop([], input, _opts), do: {:ok, input}
+
+  def pipe_loop([interactor | interactors], input, opts) do
+    with {:ok, output} <- call(interactor, input, opts), do: pipe_loop(interactors, output, opts)
+  end
+
+  def pipe_loop([interactor | interactors], opts) do
+    with {:ok, output} <- call(interactor, opts), do: pipe_loop(interactors, output, opts)
+  end
+
+  def pipe!([interactor | _] = interactors, input, opts) when is_atom(interactor),
+    do: pipe_loop!(interactors, input, opts)
+
+  def pipe!([interactor | _] = interactors, input) when is_atom(interactor),
+    do: pipe_loop!(interactors, input, [])
+
+  def pipe!(interactors, opts), do: pipe_loop!(interactors, opts)
+  def pipe!(interactors), do: pipe_loop!(interactors, [])
+
+  def pipe_loop!([], output, _opts), do: output
+
+  def pipe_loop!([interactor | interactors], input, opts),
+    do: pipe_loop!(interactors, call!(interactor, input, opts), opts)
+
+  def pipe_loop!([interactor | interactors], opts),
+    do: pipe_loop!(interactors, call!(interactor, opts), opts)
+
   def call(interactor, input, opts) when is_atom(interactor), do: interactor.call(input, opts)
 
   def call(interactor, input) when is_atom(interactor), do: interactor.call(input, [])

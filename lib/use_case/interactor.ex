@@ -2,7 +2,7 @@ defmodule UseCase.Interactor do
   defmacro __using__(opts \\ []) do
     quote do
       defstruct unquote(Keyword.get(opts, :input, []))
-      defmodule Output, do: defstruct(unquote(Keyword.get(opts, :output, [])))
+      defmodule Output, do: defstruct(unquote(Keyword.get(opts, :output, [])) ++ [:_state])
       defmodule Error, do: defexception(unquote(Keyword.get(opts, :error, []) ++ [:message]))
 
       def ok, do: {:ok, %__MODULE__.Output{}}
