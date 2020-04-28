@@ -13,6 +13,7 @@ defmodule UseCase.InteractorTest do
     def test_ok, do: ok()
     def test_error, do: error()
     def test_ok_value, do: ok(some_result: "result")
+    def test_ok_state, do: ok(_state: "result")
     def test_error_value, do: error("test", number: 1)
     def test_error_value_only_message, do: error("test")
   end
@@ -22,6 +23,7 @@ defmodule UseCase.InteractorTest do
       assert FakeUC.test_ok() == {:ok, %FakeUC.Output{}}
       assert FakeUC.test_error() == {:error, %FakeUC.Error{}}
       assert FakeUC.test_ok_value() == {:ok, %FakeUC.Output{some_result: "result"}}
+      assert FakeUC.test_ok_state() == {:ok, %FakeUC.Output{_state: "result"}}
       assert FakeUC.test_error_value() == {:error, %FakeUC.Error{message: "test", number: 1}}
 
       assert FakeUC.test_error_value_only_message() ==
