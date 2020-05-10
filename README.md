@@ -9,7 +9,7 @@ A way to increase *Elixir* projects readability and maintenance based on *Use Ca
 - Readability
 - Screaming architecture
 - Enforce inputs and outputs of our project use cases
-- Better errors (Know exactly where our code fails)
+- Better errors (Know exactly where code fails)
 - Standardization
 
 ## Installation
@@ -38,9 +38,9 @@ defmodule SayHello do
 end
 ```
 
-Now our `SayHello` module has the `ok` and `error` macros and a struct for `Output` like `%SayHello.Output{message: "something"}`
+Now our `SayHello` module has the `ok` and `error` macros and a struct for `Output` like `%SayHello.Output{message: "something"}`.
 
-The `ok` and `error` macro can be used to define when our interactor `success` or `fail`
+The `ok` and `error` macro can be used to define when our interactor success or fail.
 
 After define, we can call it in many ways:
 
@@ -48,14 +48,14 @@ After define, we can call it in many ways:
 iex> UseCase.call(SayHello, %{name: "Henrique"}) 
 iex> {:ok, SayHello.Output{message: "Hello Henrique!", _state: nil}}
 
-iex> UseCase.call!(SayHello, %{name: "Henrique"}) 
-iex> SayHello.Output{message: "Hello Henrique!", _state: nil}
-
 iex> SayHello.call(%{name: "Henrique"})
 iex> {:ok, SayHello.Output{message: "Hello Henrique!", _state: nil}}
 
 iex> UseCase.call(SayHello, %{name: nil}) 
 iex> {:error, SayHello.Error{message: "name is obrigatory!"}}
+
+iex> UseCase.call!(SayHello, %{name: "Henrique"}) 
+iex> SayHello.Output{message: "Hello Henrique!", _state: nil}
 
 iex> UseCase.call!(SayHello, %{name: nil}) 
 iex> **** SayHello.Error name is obrigatory!
@@ -69,7 +69,7 @@ Sometimes we want to guarantee the inputs our interactors will receive, we can d
 defmodule SayHello do
   use UseCase.Interactor,
     output: [:message],
-    input: [:name] # Add this 
+    input: [:name] # Add this
 
   def call(%SayHello{name: name}, _opts), do: ok(message: "Hello #{name}!")
   def call(%SayHello{name: nil}, _opts), do: error("name is obrigatory")
@@ -80,22 +80,22 @@ Now, with `UseCase` module we can call it using the input directly:
 
 ```elixir
 iex> UseCase.call %SayHello{name: "Henrique"} 
-iex> {:ok, SayHello.Output{message: "Hello Henrique!"}}
+iex> {:ok, SayHello.Output{message: "Hello Henrique!", _state: nil}}
 
 iex> UseCase.call! %SayHello{name: "Henrique"} 
-iex> SayHello.Output{message: "Hello Henrique!"}
+iex> SayHello.Output{message: "Hello Henrique!", _state: nil}
 ```
 
-### Adding more information for errors
+### Defining errors
 
-We can add more information for errors this way:  
+If we want to send extra informations in errors, we can do it as `input` and `output`.
 
 ```elixir
 defmodule SayHello do
   use UseCase.Interactor,
     output: [:message],
     input: [:name],
-    error: [:code]
+    error: [:code] # Add this
 
   def call(%SayHello{name: name}, _opts), do: ok(message: "Hello #{name}!")
   def call(%SayHello{name: nil}, _opts), do: error("name is obrigatory", code: 500) # And use it
@@ -108,7 +108,8 @@ iex> {:error, SayHello.Error{message: "name is obrigatory!", code: 500}}
 ```
 
 ### Default fields
-When not defined input, output and error defaults to:
+
+When not defined, input, output and error defaults to:
 
 ```
 input: [:_state],
@@ -116,11 +117,11 @@ output: [],
 error: [:message]
 ```
 
-Fields `:_state` in `input` and `:message` in `error` are always appended. The `:_state` field is very useful for pipe operations
+Fields `:_state` in `input` and `:message` in `error` are always appended. The `:_state` field is very useful for pipe operations.
 
 ### Composing with `UseCase.pipe` and `UseCase.pipe!`
 
-We can compose interactors simple as that:
+Lets define an `LogOperation` interactor:
 
 ```elixir
 defmodule LogOperation do
@@ -133,13 +134,35 @@ defmodule LogOperation do
 end
 ```
 
+We can compose with out `SayHello` simple as that:
+
 ```elixir
 iex> UseCase.pipe [%SayHello{name: "Henrique"}, LogOperation] 
 iex> {:ok, LogOperation.Output{_state: nil}}
 
 iex> UseCase.pipe [%SayHello{name: nil}, LogOperation] 
 iex> {:error, SayHello.Error{message: "name is obrigatory!", code: 500}}
+
+iex> UseCase.pipe! [%SayHello{name: "Henrique"}, LogOperation] 
+iex> LogOperation.Output{_state: nil}
+
+iex> UseCase.pipe! [%SayHello{name: nil}, LogOperation] 
+iex> **** SayHello.Error name is obrigatory!
 ```
+
+All we need is match outputs and inputs and use one of pipe `UseCase` functions.
+
+### Sending options
+
+All `UseCase` functions last argument is the options keyword list that is sent to interactors:
+
+```Elixir
+import UseCase
+
+call(%SayHello{name: "henrique"}, my_option: true)
+pipe([%SayHello{name: "Henrique"}, LogOperation], my_option: true)
+```
+
 
 ## Contribute
 
