@@ -46,7 +46,7 @@ Lets see some of the benefits from using the library (or only the idea behind us
 There we have some problems:
 
 - It is not yet clear what our application intend to do.
-- Contexts can get extremely fat with a lot of business logic.
+- Contexts files (books.ex) can get extremely fat with a lot of business logic.
 
 Now, thinking in use case interactors we can imagine *Phoenix* contexts as a *Facade* for your use cases, and do that:
 
