@@ -2,26 +2,20 @@
 
 # UseCase
 
-A way to increase *Elixir* projects readability and maintenance based on *Use Cases* and *Interactors*, the main goals are:
-
-- Single Responsability Principle
-- Composability
-- Readability
-- Screaming architecture
-- Enforce inputs and outputs of our project use cases
-- Better errors (Know exactly where code fails)
-- Standardization
+A way to increase *Elixir* projects readability and maintenance. Heavily inspired by *Clean Architecture*.
 
 ## Table of contents
 
   - [Installation](#installation)
-  - [Interactors](#interactors)
+  - [About](#about)
+  - [Creating Interactors](#creating-interactors)
     - [Defining inputs](#defining-inputs)
     - [Defining errors](#defining-errors)
     - [Default fields](#default-fields)
     - [Composing with pipes](#composing-with-pipes)
     - [Sending Options](#sending-options)
   - [Contribute](#contribute)
+
 
 ## Installation
 
@@ -35,7 +29,81 @@ def deps do
 end
 ```
 
-## Interactors
+## About
+
+Lets see some of the benefits from using the library (or only the idea behind use cases interactors). Imagine a library system where we have the context "books". On normal *Phoenix* systems, the design may look like the example below:
+
+```
+▾ library/                 
+  ▾ books/                 
+         author.ex      
+         book.ex        
+       application.ex    
+       books.ex           
+       repo.ex           
+```
+
+There we have some problems:
+
+- It is not yet clear what our application intend to do.
+- Contexts can get extremely fat with a lot of business logic.
+
+Now, thinking in use case interactors we can imagine *Phoenix* contexts as a *Facade* for your use cases, and do that:
+
+```
+▾ library/                 
+  ▾ books/                 
+         author.ex      
+         book.ex        
+         create_author.ex        
+         create_book.ex        
+         sell_book.ex        
+       application.ex    
+       books.ex           
+       repo.ex           
+```
+
+Our context will look like the example above:
+
+```Elixir
+defmodule Library.Books do                         
+  @moduledoc """                                   
+  The Books context.                               
+  """                                              
+  import UseCase, only: [call: 1]                                   
+  import __MODULE__.{CreateAuthor, SellBook, CreateBook}
+
+  @doc """                                       
+  Creates a authors.                             
+                                                 
+      iex> create_authors(name)       
+      {:ok, %Library.Books.CreateAuthor.Output{}}
+                                                 
+      iex> create_authors(bad_name)   
+      {:error, %Library.Books.CreateAuthor.Error{}}
+                                                 
+  """                                            
+  def create_author(name),                
+    do: call(%CreateAuthor{name: name})          
+
+  # ...
+  def create_book(name, author),                
+    do: call(%CreateBook{name: name, author: author})          
+
+  # ...
+  def sell_book(book_id),                
+    do: call(%SellBook{book_id: book_id})          
+```
+
+Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for your business rules. *Controllers*, *views* and even *Phoenix* know almost nothing about our business, they know that we can "create books" and "sell books", and for that we need the params "name", "author" or "book_id", but nothing about what goes inside. Goals: 
+
+- Its clear what our application intend to do. It screams.
+- Contexts are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
+- When we call an use case interactor, we will get a specific output or an specific error from that use case, making the system code more assertive in relation to what it is doing.
+
+And this is just the tip of the iceberg, to full enjoy this library, i recommend you to read the *Clean Architecture* book.
+
+## Creating interactors
 
 The most basic interactor can be created using the `UseCase.Interactor` module, defining an `output` for it and creating a `call/2` function:
 
@@ -173,7 +241,6 @@ import UseCase
 call(%SayHello{name: "henrique"}, my_option: true)
 pipe([%SayHello{name: "Henrique"}, LogOperation], my_option: true)
 ```
-
 
 ## Contribute
 
