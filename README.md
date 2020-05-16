@@ -250,8 +250,8 @@ I'm totally open to new ideas. Fork, open issues and feel free to contribute wit
 
 #### branchs
 
-*your_branch_name*
+*your_branch_name* or *your-branch-name* 
 
 #### commits
 
-*[your_branch_name] Your commit*
+*[your_branch_name] Your commit* or *[your-branch-name] Your commit*
