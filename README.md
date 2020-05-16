@@ -134,7 +134,7 @@ defmodule LogOperation do
 end
 ```
 
-We can compose with out `SayHello` simple as that:
+We can compose with our `SayHello` simple as that:
 
 ```elixir
 iex> UseCase.pipe [%SayHello{name: "Henrique"}, LogOperation] 
