@@ -99,7 +99,7 @@ Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for 
 
 - Its clear what our application intend to do. It screams.
 - Contexts files are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
-- When we call an use case interactor, we will get a specific output or an specific error from that use case, making the system code more assertive in relation to what it is doing.
+- When we call an use case interactor, we will get a specific output or an specific error from that use case (and we have a specific input too), making the system code more assertive in relation to what it is doing.
 
 And this is just the tip of the iceberg, to full enjoy this library, i recommend you to read the *Clean Architecture* book.
 
