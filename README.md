@@ -98,7 +98,7 @@ defmodule Library.Books do
 Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for our business rules. *Controllers*, *views* and even *Phoenix* know almost nothing about our business, they know that we can "create books" and "sell books", and for that we need the params "name", "author" or "book_id", but nothing about what goes inside. Goals: 
 
 - Its clear what our application intend to do. It screams.
-- Contexts are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
+- Contexts files are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
 - When we call an use case interactor, we will get a specific output or an specific error from that use case, making the system code more assertive in relation to what it is doing.
 
 And this is just the tip of the iceberg, to full enjoy this library, i recommend you to read the *Clean Architecture* book.
