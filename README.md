@@ -12,6 +12,17 @@ A way to increase *Elixir* projects readability and maintenance based on *Use Ca
 - Better errors (Know exactly where code fails)
 - Standardization
 
+## Table of contents
+
+  - [Installation](#installation)
+  - [Interactors](#interactors)
+    - [Defining inputs](#defining-inputs)
+    - [Defining errors](#defining-errors)
+    - [Default fields](#default-fields)
+    - [Composing with pipes](#composing-with-pipes)
+    - [Sending Options](#sending-options)
+  - [Contribute](#contribute)
+
 ## Installation
 
 The package can be installed by adding `use_case` to your list of dependencies in `mix.exs`:
@@ -24,7 +35,7 @@ def deps do
 end
 ```
 
-## Creating a basic interactor
+## Interactors
 
 The most basic interactor can be created using the `UseCase.Interactor` module, defining an `output` for it and creating a `call/2` function:
 
@@ -61,7 +72,7 @@ iex> UseCase.call!(SayHello, %{name: nil})
 iex> **** SayHello.Error name is obrigatory!
 ```
 
-### Defining an input
+### Defining inputs
 
 Sometimes we want to guarantee the inputs our interactors will receive, we can do it defining this way:  
 
@@ -119,7 +130,7 @@ error: [:message]
 
 Fields `:_state` in `input` and `:message` in `error` are always appended. The `:_state` field is very useful for pipe operations.
 
-### Composing with `UseCase.pipe` and `UseCase.pipe!`
+### Composing with pipes
 
 Lets define an `LogOperation` interactor:
 

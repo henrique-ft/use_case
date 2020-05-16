@@ -1,4 +1,8 @@
 defmodule UseCase.Interactor do
+  @moduledoc """
+    Adds `ok/0`,`ok/1`, `error/0`, `error/1` and `error/2` functions to a module that uses it
+  """
+
   defmacro __using__(opts \\ []) do
     quote do
       defstruct unquote(Keyword.get(opts, :input, []))
