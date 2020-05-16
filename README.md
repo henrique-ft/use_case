@@ -30,7 +30,7 @@ The package can be installed by adding `use_case` to your list of dependencies i
 ```elixir
 def deps do
   [
-    {:use_case, "~> 0.1.2"}
+    {:use_case, "~> 0.1.3"}
   ]
 end
 ```
