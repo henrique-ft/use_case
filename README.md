@@ -77,10 +77,10 @@ defmodule Library.Books do
   Creates a authors.                             
                                                  
       iex> create_authors(name)       
-      {:ok, %Library.Books.CreateAuthor.Output{}}
+      {:ok, %Library.Books.CreateAuthor.Output{ ... }}
                                                  
       iex> create_authors(bad_name)   
-      {:error, %Library.Books.CreateAuthor.Error{}}
+      {:error, %Library.Books.CreateAuthor.Error{message: "Bad name given"}}
                                                  
   """                                            
   def create_author(name),                
@@ -95,7 +95,7 @@ defmodule Library.Books do
     do: call(%SellBook{book_id: book_id})          
 ```
 
-Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for your business rules. *Controllers*, *views* and even *Phoenix* know almost nothing about our business, they know that we can "create books" and "sell books", and for that we need the params "name", "author" or "book_id", but nothing about what goes inside. Goals: 
+Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for our business rules. *Controllers*, *views* and even *Phoenix* know almost nothing about our business, they know that we can "create books" and "sell books", and for that we need the params "name", "author" or "book_id", but nothing about what goes inside. Goals: 
 
 - Its clear what our application intend to do. It screams.
 - Contexts are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
