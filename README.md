@@ -216,6 +216,9 @@ end
 We can compose with our `SayHello` simple as that:
 
 ```elixir
+iex> UseCase.pipe [SayHello, LogOperation], %SayHello{name: "Henrique"}
+iex> {:ok, LogOperation.Output{_state: nil}}
+
 iex> UseCase.pipe [%SayHello{name: "Henrique"}, LogOperation] 
 iex> {:ok, LogOperation.Output{_state: nil}}
 
@@ -240,6 +243,7 @@ import UseCase
 
 call(%SayHello{name: "henrique"}, my_option: true)
 pipe([%SayHello{name: "Henrique"}, LogOperation], my_option: true)
+pipe([SayHello, LogOperation], %SayHello{name: "Henrique"}, my_option: true)
 ```
 
 ## Contribute
