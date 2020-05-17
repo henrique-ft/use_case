@@ -2,6 +2,8 @@
 
 # UseCase
 
+![](https://img.shields.io/hexpm/v/use_case?style=social) ![](https://img.shields.io/hexpm/l/use_case?style=social)
+
 A way to increase *Elixir* projects readability and maintenance. Heavily inspired by *Clean Architecture*.
 
 ## Table of contents
@@ -77,10 +79,10 @@ defmodule Library.Books do
   Creates a authors.                             
                                                  
       iex> create_authors(name)       
-      {:ok, %Library.Books.CreateAuthor.Output{}}
+      {:ok, %Library.Books.CreateAuthor.Output{ ... }}
                                                  
       iex> create_authors(bad_name)   
-      {:error, %Library.Books.CreateAuthor.Error{}}
+      {:error, %Library.Books.CreateAuthor.Error{message: "Bad name given"}}
                                                  
   """                                            
   def create_author(name),                
@@ -95,11 +97,11 @@ defmodule Library.Books do
     do: call(%SellBook{book_id: book_id})          
 ```
 
-Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for your business rules. *Controllers*, *views* and even *Phoenix* know almost nothing about our business, they know that we can "create books" and "sell books", and for that we need the params "name", "author" or "book_id", but nothing about what goes inside. Goals: 
+Let's say that now `CreateBook`, `CreateAuthor` and `SellBook` are gateways for our business rules. *Controllers*, *views* and even *Phoenix* know almost nothing about our business, they know that we can "create books" and "sell books", and for that we need the params "name", "author" or "book_id", but nothing about what goes inside. Goals: 
 
 - Its clear what our application intend to do. It screams.
-- Contexts are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
-- When we call an use case interactor, we will get a specific output or an specific error from that use case, making the system code more assertive in relation to what it is doing.
+- Contexts files are only facades, an api for our use cases interactors to the external world. They dont know Repos or Schemas.
+- When we call an use case interactor, we will get a specific output or an specific error from that use case (and we have a specific input too), making the system code more assertive in relation to what it is doing.
 
 And this is just the tip of the iceberg, to full enjoy this library, i recommend you to read the *Clean Architecture* book.
 
@@ -254,8 +256,8 @@ I'm totally open to new ideas. Fork, open issues and feel free to contribute wit
 
 #### branchs
 
-*your_branch_name*
+*your_branch_name* or *your-branch-name* 
 
 #### commits
 
-*[your_branch_name] Your commit*
+*[your_branch_name] Your commit* or *[your-branch-name] Your commit*
