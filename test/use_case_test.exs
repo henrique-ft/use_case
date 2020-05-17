@@ -91,7 +91,7 @@ defmodule UseCaseTest do
   describe "UseCase.pipe/3" do
     test "it call's interactors with correct params and opts" do
       interactors = [FakeInteractor, FakeInteractorTwo, FakeInteractorThree]
-      result = UseCase.pipe(interactors, %{some_value: "test"}, my_option: "test")
+      result = UseCase.pipe(%{some_value: "test"}, interactors, my_option: "test")
 
       assert_received {%{some_value: "test"}, [my_option: "test"]}
       assert_received {%FakeInteractor.Output{}, [my_option: "test"]}
@@ -101,7 +101,7 @@ defmodule UseCaseTest do
 
     test "if some interactor fails, returns the failed return" do
       interactors = [FakeInteractor, FakeInteractorTwo, FakeInteractorThree]
-      result = UseCase.pipe(interactors, %{some_value: "test"}, my_option: "fail_two")
+      result = UseCase.pipe(%{some_value: "test"}, interactors, my_option: "fail_two")
 
       assert_received {%{some_value: "test"}, [my_option: "fail_two"]}
       assert_received {%FakeInteractor.Output{}, [my_option: "fail_two"]}
@@ -113,7 +113,7 @@ defmodule UseCaseTest do
   describe "UseCase.pipe!/3" do
     test "it call's interactors with correct params and opts" do
       interactors = [FakeInteractor, FakeInteractorTwo, FakeInteractorThree]
-      result = UseCase.pipe!(interactors, %{some_value: "test"}, my_option: "test")
+      result = UseCase.pipe!(%{some_value: "test"}, interactors, my_option: "test")
 
       assert_received {%{some_value: "test"}, [my_option: "test"]}
       assert_received {%FakeInteractor.Output{}, [my_option: "test"]}
@@ -125,7 +125,7 @@ defmodule UseCaseTest do
       interactors = [FakeInteractor, FakeInteractorTwo, FakeInteractorThree]
 
       assert_raise FakeInteractorTwo.Error, fn ->
-        UseCase.pipe!(interactors, %{some_value: "test"}, my_option: "fail_two")
+        UseCase.pipe!(%{some_value: "test"}, interactors, my_option: "fail_two")
       end
 
       assert_received {%{some_value: "test"}, [my_option: "fail_two"]}
