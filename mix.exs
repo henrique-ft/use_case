@@ -9,7 +9,8 @@ defmodule UseCase.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
-      description: "A way to increase Elixir projects readability and maintenance based on Use Cases and Interactors.",
+      description:
+        "A way to increase Elixir projects readability and maintenance based on Use Cases and Interactors.",
       package: package(),
       docs: [logo: "priv/static/logo.png", extras: ["README.md"], main: "readme"],
       name: "UseCase",

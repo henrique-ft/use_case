@@ -218,7 +218,7 @@ end
 We can compose with our `SayHello` simple as that:
 
 ```elixir
-iex> UseCase.pipe [SayHello, LogOperation], %SayHello{name: "Henrique"}
+iex> %SayHello{name: "Henrique"} |> UseCase.pipe [SayHello, LogOperation]
 iex> {:ok, LogOperation.Output{_state: nil}}
 
 iex> UseCase.pipe [%SayHello{name: "Henrique"}, LogOperation] 
@@ -226,6 +226,9 @@ iex> {:ok, LogOperation.Output{_state: nil}}
 
 iex> UseCase.pipe [%SayHello{name: nil}, LogOperation] 
 iex> {:error, SayHello.Error{message: "name is obrigatory!", code: 500}}
+
+iex> %SayHello{name: "Henrique"} |> UseCase.pipe! [SayHello, LogOperation]
+iex> LogOperation.Output{_state: nil}
 
 iex> UseCase.pipe! [%SayHello{name: "Henrique"}, LogOperation] 
 iex> LogOperation.Output{_state: nil}
@@ -244,8 +247,8 @@ All `UseCase` functions last argument is the options keyword list that is sent t
 import UseCase
 
 call(%SayHello{name: "henrique"}, my_option: true)
+%SayHello{name: "Henrique"} |> pipe([SayHello, LogOperation], my_option: true)
 pipe([%SayHello{name: "Henrique"}, LogOperation], my_option: true)
-pipe([SayHello, LogOperation], %SayHello{name: "Henrique"}, my_option: true)
 ```
 
 ## Contribute
