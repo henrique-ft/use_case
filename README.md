@@ -4,7 +4,7 @@
 
 ![](https://img.shields.io/hexpm/v/use_case?style=social) ![](https://img.shields.io/hexpm/l/use_case?style=social)
 
-A way to increase *Elixir* projects readability and maintenance. Heavily inspired by *Clean Architecture*.
+A way to increase *Elixir* projects readability and maintenance. Heavily inspired by *Clean Architecture*. We can join it with [clean mixer](https://github.com/miros/clean_mixer) for a very nice *Clean Architecture* code experience.
 
 ## Table of contents
 
