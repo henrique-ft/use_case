@@ -7,8 +7,7 @@ defmodule Mix.Tasks.UseCase.Gen.Prh do
     if io_puts do
       IO.puts("""
 
-        use_case.gen.phx_resource_html ->
-
+        use_case.gen.prh ->
         """)
     end
 
