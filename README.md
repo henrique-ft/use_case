@@ -16,6 +16,7 @@ A way to increase *Elixir* projects readability and maintenance. Heavily inspire
     - [Default fields](#default-fields)
     - [Composing with pipes](#composing-with-pipes)
     - [Sending Options](#sending-options)
+  - [Mix Tasks](#mix-tasks)
   - [Contribute](#contribute)
 
 
@@ -250,6 +251,18 @@ call(%SayHello{name: "henrique"}, my_option: true)
 %SayHello{name: "Henrique"} |> pipe([SayHello, LogOperation], my_option: true)
 pipe([%SayHello{name: "Henrique"}, LogOperation], my_option: true)
 ```
+
+## Mix Tasks
+
+`mix use_case.gen.interactor`
+
+`mix use_case.gen.phx_resource`
+
+`mix use_case.gen.phx_resource_html`
+
+`mix use_case.gen.phx_resource_json`
+
+`mix use_case.gen.phx_resource_temple`
 
 ## Contribute
 
