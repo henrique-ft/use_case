@@ -1,0 +1,11 @@
+<%= if Keyword.get(@option_context, :scoped, false) do %>
+defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.Interactors.<%= @context[:scoped] %> do
+<% else %>
+defmodule <%= @context[:base] %>.Interactors.<%= @context[:scoped] %> do
+<% end %>
+  @moduledoc false
+
+  use UseCase.Interactor
+
+  def call(%{name: name}, _opts), do: ok(message: "Hello #{name}!")
+end

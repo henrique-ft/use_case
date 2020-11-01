@@ -1,0 +1,44 @@
+<%= if Keyword.get(@option_context, :scoped, false) do %>
+defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %> do
+<% else %>
+defmodule <%= @context[:base] %>.Repo.<%= @context[:scoped] %> do
+<% end %>
+  @moduledoc false
+
+  <%= if Keyword.get(@option_context, :scoped, false) do %>
+  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Schemas.<%= @context[:scoped] %>
+  <% else %>
+  alias <%= @context[:base] %>.Schemas.<%= @context[:scoped] %>
+  <% end %>
+  alias <%= @context[:base] %>.Repo
+
+  def list do
+    Repo.all(<%= @schema.alias %>)
+  end
+
+  def get!(id), do: Repo.get!(<%= @schema.alias %>, id)
+
+  def create(attrs \\ %{}) do
+    %<%= @schema.alias %>{}
+    |> <%= @schema.alias %>.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update(%<%= @schema.alias %>{} = <%= @schema.singular %>, attrs) do
+    <%= @schema.singular %>
+    |> <%= @schema.alias %>.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete(%<%= @schema.alias %>{} = <%= @schema.singular %>) do
+    Repo.delete(<%= @schema.singular %>)
+  end
+
+  def new_changeset do
+    <%= @schema.alias %>.changeset(%<%= @schema.alias %>{}, %{})
+  end
+
+  def edit_changeset(%<%= @schema.alias %>{} = <%= @schema.singular %>) do
+    <%= @schema.alias %>.changeset(<%= @schema.singular %>, %{})
+  end
+end
