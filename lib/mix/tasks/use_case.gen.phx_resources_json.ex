@@ -20,7 +20,6 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceJson do
       IO.puts("""
 
         use_case.gen.phx_resource_json ->
-
         """)
     end
 
@@ -131,6 +130,10 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceJson do
 
   defp get_table_name([_,table_name|_]) do
     table_name
+  end
+
+  defp get_table_name(_) do
+    raise "Table name is obrigatory"
   end
 
   defp get_schema_name([schema|_], []) do
