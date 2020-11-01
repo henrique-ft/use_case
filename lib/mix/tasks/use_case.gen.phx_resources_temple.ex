@@ -1,6 +1,16 @@
 defmodule Mix.Tasks.UseCase.Gen.PhxResourceTemple do
   @shortdoc "Generates repo, schema, migration, controllers, temple templates, views and tests for a resource"
+  @moduledoc """
+    Generates repo, schema, migration, controllers, temple templates, views and tests for a resource.
 
+        mix use_case.gen.phx_resource Post posts title content image likes:int
+
+    or
+
+        mix use_case.gen.phx_resource Post posts title content image likes:int --context MyBoundedContext
+
+    The first argument is the resource name, the second the database table name for the resource and the others the resource fields. We can set the --context flag to create the resource in context folders and namespaces
+  """
   use Mix.Task
 
   alias UcScaffold.Mix.Phoenix.Schema
