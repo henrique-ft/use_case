@@ -1,0 +1,20 @@
+<%= if Keyword.get(@option_context, :scoped, false) do %>
+defmodule <%= @context[:web_module] %>.<%= @option_context[:scoped] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>View do
+<% else %>
+defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>View do
+<% end %>
+  use <%= @context[:web_module] %>, :view
+
+  def render("index.json", %{<%= @schema.plural %>: <%= @schema.plural %>}) do
+    %{data: render_many(<%= @schema.plural %>, __MODULE__, "<%= @schema.singular %>.json")}
+  end
+
+  def render("show.json", %{<%= @schema.singular %>: <%= @schema.singular %>}) do
+    %{data: render_one(<%= @schema.singular %>, __MODULE__, "<%= @schema.singular %>.json")}
+  end
+
+  def render("<%= @schema.singular %>.json", %{<%= @schema.singular %>: <%= @schema.singular %>}) do
+    %{id: <%= @schema.singular %>.id<%= for {k, _} <- @schema.attrs do %>,
+      <%= k %>: <%= @schema.singular %>.<%= k %><% end %>}
+  end
+end

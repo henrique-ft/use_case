@@ -1,0 +1,76 @@
+<%= if Keyword.get(@option_context, :scoped, false) do %>
+defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %>Test do
+<% else %>
+defmodule <%= @context[:base] %>.Repo.<%= @context[:scoped] %> do
+<% end %>
+  @moduledoc false
+  use <%= @context[:base] %>.DataCase, async: true
+
+  describe "<%= @schema.plural %>" do
+    <%= if Keyword.get(@option_context, :scoped, false) do %>
+    alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %>
+    <% else %>
+    alias <%= @context[:base] %>.Repo.<%= @context[:scoped] %>
+    <% end %>
+    alias <%= @schema.module %>, as: <%= @schema.alias %>Schema
+
+    @valid_attrs <%= inspect @schema.params.create %>
+    @update_attrs <%= inspect @schema.params.update %>
+    @invalid_attrs <%= inspect for {key, _} <- @schema.params.create, into: %{}, do: {key, nil} %>
+
+    def <%= @schema.singular %>_fixture(attrs \\ %{}) do
+      {:ok, <%= @schema.singular %>} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> <%= @context[:alias] %>.create()
+
+      <%= @schema.singular %>
+    end
+
+    test "list/0 returns all <%= @schema.plural %>" do
+      <%= @schema.singular %> = <%= @schema.singular %>_fixture()
+      assert <%= @context[:alias] %>.list() == [<%= @schema.singular %>]
+    end
+
+    test "get!/1 returns the <%= @schema.singular %> with given id" do
+      <%= @schema.singular %> = <%= @schema.singular %>_fixture()
+      assert <%= @context[:alias] %>.get!(<%= @schema.singular %>.id) == <%= @schema.singular %>
+    end
+
+    test "create/1 with valid data creates a <%= @schema.singular %>" do
+      assert {:ok, %<%= @schema.alias %>Schema{} = <%= @schema.singular %>} = <%= @context[:alias] %>.create(@valid_attrs)<%= for {field, value} <- @schema.params.create do %>
+      assert <%= @schema.singular %>.<%= field %> == <%= Mix.Phoenix.Schema.value(@schema, field, value) %><% end %>
+    end
+
+    test "create/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = <%= @context[:alias] %>.create(@invalid_attrs)
+    end
+
+    test "update/2 with valid data updates the <%= @schema.singular %>" do
+      <%= @schema.singular %> = <%= @schema.singular %>_fixture()
+      assert {:ok, %<%= @schema.alias %>Schema{} = <%= @schema.singular %>} = <%= @context[:alias] %>.update(<%= @schema.singular %>, @update_attrs)<%= for {field, value} <- @schema.params.update do %>
+      assert <%= @schema.singular %>.<%= field %> == <%= Mix.Phoenix.Schema.value(@schema, field, value) %><% end %>
+    end
+
+    test "update/2 with invalid data returns error changeset" do
+      <%= @schema.singular %> = <%= @schema.singular %>_fixture()
+      assert {:error, %Ecto.Changeset{}} = <%= @context[:alias] %>.update(<%= @schema.singular %>, @invalid_attrs)
+      assert <%= @schema.singular %> == <%= @context[:alias] %>.get!(<%= @schema.singular %>.id)
+    end
+
+    test "delete/1 deletes the <%= @schema.singular %>" do
+      <%= @schema.singular %> = <%= @schema.singular %>_fixture()
+      assert {:ok, %<%= @schema.alias %>Schema{}} = <%= @context[:alias] %>.delete(<%= @schema.singular %>)
+      assert_raise Ecto.NoResultsError, fn -> <%= @context[:alias] %>.get!(<%= @schema.singular %>.id) end
+    end
+
+    test "edit_changeset/1 returns a <%= @schema.singular %> changeset" do
+      <%= @schema.singular %> = <%= @schema.singular %>_fixture()
+      assert %Ecto.Changeset{} = <%= @context[:alias] %>.edit_changeset(<%= @schema.singular %>)
+    end
+
+    test "new_changeset/1 returns a <%= @schema.singular %> changeset" do
+      assert %Ecto.Changeset{} = <%= @context[:alias] %>.new_changeset
+    end
+  end
+end

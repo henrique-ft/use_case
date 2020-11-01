@@ -1,0 +1,13 @@
+h1 gettext("Show <%= @schema.human_singular %>")
+
+ul do
+<%= for {k, _} <- @schema.attrs do %>
+  li do
+    strong gettext("<%= Phoenix.Naming.humanize(Atom.to_string(k)) %>"):
+    @<%= @schema.singular %>.<%= k %>
+  end
+<% end %>
+end
+
+span link(gettext("Edit"), to: Routes.<%= @schema.route_helper %>_path(@conn, :edit, @<%= @schema.singular %>))
+span link(gettext("Back"), to: Routes.<%= @schema.route_helper %>_path(@conn, :index))

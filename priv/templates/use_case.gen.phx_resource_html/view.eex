@@ -1,0 +1,7 @@
+<% if Keyword.get(@option_context, :scoped, false) do %>
+defmodule <%= @context[:web_module] %>.<%= @option_context[:scoped] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>View do
+<% else %>
+defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>View do
+<% end %>
+  use <%= @context[:web_module] %>, :view
+end
