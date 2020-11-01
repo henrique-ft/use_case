@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.UseCase.Gen.Pr do
+  @shortdoc "An alias to use_case.gen.phx_resource"
+
   use Mix.Task
 
   alias UcScaffold.Mix.Phoenix.Schema

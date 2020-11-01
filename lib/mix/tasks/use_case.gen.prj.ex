@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.UseCase.Gen.Prj do
+  @shortdoc "An alias to use_case.gen.phx_resource_json"
+
   use Mix.Task
 
   def run(io_puts \\ true, args) do
