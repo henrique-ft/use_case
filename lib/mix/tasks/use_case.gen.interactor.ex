@@ -7,9 +7,9 @@ defmodule Mix.Tasks.UseCase.Gen.Interactor do
 
     or
 
-        mix use_case.gen.interactor DoSomething.Cool --context MyBoundedContext
+        mix use_case.gen.interactor DoSomething.Cool
 
-    The first argument is the interactor name. We can set the --context flag to create an interactor in a context folder and namespace
+    The first argument is the interactor name.
   """
 
 
@@ -35,9 +35,9 @@ defmodule Mix.Tasks.UseCase.Gen.Interactor do
   defp create_interactor(context, option_context) do
     path =
       if Keyword.get(option_context, :path, false) do
-        "lib/#{Macro.underscore(context[:base])}/#{option_context[:path]}/interactors/#{context[:path]}.ex"
+        "lib/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}.ex"
       else
-        "lib/#{Macro.underscore(context[:base])}/interactors/#{context[:path]}.ex"
+        "lib/#{Macro.underscore(context[:base])}/#{context[:path]}.ex"
       end
 
     copy_template(
@@ -51,9 +51,9 @@ defmodule Mix.Tasks.UseCase.Gen.Interactor do
   defp create_interactor_test(context, option_context) do
     path =
       if Keyword.get(option_context, :path, false) do
-        "test/#{Macro.underscore(context[:base])}/#{option_context[:path]}/interactors/#{context[:path]}_test.ex"
+        "test/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}_test.ex"
       else
-        "test/#{Macro.underscore(context[:base])}/interactors/#{context[:path]}_test.ex"
+        "test/#{Macro.underscore(context[:base])}/#{context[:path]}_test.ex"
       end
 
     copy_template(
