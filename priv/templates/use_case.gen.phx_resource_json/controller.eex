@@ -1,24 +1,15 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:web_module] %>.<%= @option_context[:scoped] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>Controller do
-<% else %>
-defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>Controller do
-<% end %>
-  use <%= @context[:web_module] %>, :controller
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.<%= @context[:scoped] %>
-<% else %>
-  alias <%= @context[:base] %>.<%= @context[:scoped] %>
-<% end %>
+defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module] |> String.replace("#{@context_inflected[:base]}.", "") %>Controller do
+  use <%= @context_inflected[:web_module] %>, :controller
+  alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 
-
-  action_fallback <%= @context[:web_module] %>.FallbackController
+  action_fallback <%= @context_inflected[:web_module] %>.FallbackController
 
   def index(conn, _params) do
-    render(conn, "index.json", <%= @schema.plural %>: <%= @context[:alias] %>.list())
+    render(conn, "index.json", <%= @schema.plural %>: <%= @context_inflected[:alias] %>.list())
   end
 
   def create(conn, %{<%= inspect @schema.singular %> => <%= @schema.singular %>_params}) do
-    with {:ok, <%= @schema.singular %>} <- <%= @context[:alias] %>.create(<%= @schema.singular %>_params) do
+    with {:ok, <%= @schema.singular %>} <- <%= @context_inflected[:alias] %>.create(<%= @schema.singular %>_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.<%= @schema.route_helper %>_path(conn, :show, <%= @schema.singular %>))
@@ -27,19 +18,19 @@ defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("
   end
 
   def show(conn, %{"id" => id}) do
-    render(conn, "show.json", <%= @schema.singular %>: <%= @context[:alias] %>.get!(id))
+    render(conn, "show.json", <%= @schema.singular %>: <%= @context_inflected[:alias] %>.get!(id))
   end
 
   def update(conn, %{"id" => id, <%= inspect @schema.singular %> => <%= @schema.singular %>_params}) do
-    <%= @schema.singular %> = <%= @context[:alias] %>.get!(id)
+    <%= @schema.singular %> = <%= @context_inflected[:alias] %>.get!(id)
 
-    with {:ok, _} <- <%= @context[:alias] %>.update(<%= @schema.singular %>, <%= @schema.singular %>_params) do
+    with {:ok, _} <- <%= @context_inflected[:alias] %>.update(<%= @schema.singular %>, <%= @schema.singular %>_params) do
       render(conn, "show.json", <%= @schema.singular %>: <%= @schema.singular %>)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    with {:ok, _} <- <%= @context[:alias] %>.delete(<%= @context[:alias] %>.get!(id)) do
+    with {:ok, _} <- <%= @context_inflected[:alias] %>.delete(<%= @context_inflected[:alias] %>.get!(id)) do
       send_resp(conn, :no_content, "")
     end
   end

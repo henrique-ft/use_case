@@ -1,22 +1,22 @@
-defmodule <%= @context[:web_module] %>.FallbackController do
+defmodule <%= @context_inflected[:web_module] %>.FallbackController do
   @moduledoc """
   Translates controller action results into valid `Plug.Conn` responses.
 
   See `Phoenix.Controller.action_fallback/1` for more details.
   """
-  use <%= @context[:web_module] %>, :controller
+  use <%= @context_inflected[:web_module] %>, :controller
 
   <%= if @schema.generate? do %>def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
-    |> put_view(<%= @context[:web_module] %>.ChangesetView)
+    |> put_view(<%= @context_inflected[:web_module] %>.ChangesetView)
     |> render("error.json", changeset: changeset)
   end
 
   <% end %>def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
-    |> put_view(<%= @context[:web_module] %>.ErrorView)
+    |> put_view(<%= @context_inflected[:web_module] %>.ErrorView)
     |> render(:"404")
   end
 end

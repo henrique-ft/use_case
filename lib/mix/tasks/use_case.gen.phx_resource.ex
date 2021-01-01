@@ -1,47 +1,46 @@
 defmodule Mix.Tasks.UseCase.Gen.PhxResource do
-  @shortdoc "Generates repo, schema, migration and tests for a resource"
+  @shortdoc "Generates context, schema, migration and tests for a resource"
   @moduledoc """
-    Generates repo, schema, migration and tests for a resource.
+    Generates context, schema, migration and tests for a resource.
 
-        mix use_case.gen.phx_resource Post posts title content image likes:int
+        mix use_case.gen.phx_resource Posts Post posts title content image likes:int
 
-    or
-
-        mix use_case.gen.phx_resource Post posts title content image likes:int --context MyBoundedContext
-
-    The first argument is the resource name, the second the database table name for the resource and the others the resource fields. We can set the --context flag to create the resource in context folders and namespaces
+    The first argument is the context name, the second the resource name, the third the database table name for the resource and the others the resource fields.
   """
   use Mix.Task
 
-  alias UcScaffold.Mix.Phoenix.Schema
+  alias UseCase.Mix.Phoenix.Schema
+
+  import UseCase.Mix.Helpers
+
+  @templates_path "use_case.gen.phx_resource"
 
   def run(io_puts \\ true, args_and_options) do
     if io_puts do
       IO.puts("""
 
         use_case.gen.resource ->
-        """)
+          """)
     end
 
-    {options, args, []} = OptionParser.parse(args_and_options, strict: [context: :string])
+    args = parse_args(args_and_options)
 
-    option_context = get_option_context(Keyword.get(options, :context, nil))
-    context = get_context(args)
+    context_inflected = get_context_inflected(args)
+    schema_name = get_schema_name(args)
     table_name = get_table_name(args)
-    schema_name = get_schema_name(args, option_context)
     schema_fields = get_schema_fields(args)
 
     schema = Schema.new(schema_name, table_name, schema_fields, [])
 
-    [_|args_without_schema] = args
+    [_,_|args_without_schema] = args
 
-    create_context(context, schema, option_context)
-    create_context_test(context, schema, option_context)
+    create_context(context_inflected, schema)
+    create_context_test(context_inflected, schema)
 
     Mix.Tasks.Phx.Gen.Schema.run([schema_name] ++ args_without_schema)
   end
 
-  defp create_context(context, schema, option_context) do
+  defp create_context(context_inflected, schema) do
     updated_alias =
       schema.alias
       |> Atom.to_string()
@@ -53,22 +52,18 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResource do
       |> String.replace("Elixir.", "")
 
     path =
-      if Keyword.get(option_context, :path, false) do
-        "lib/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}.ex"
-      else
-        "lib/#{Macro.underscore(context[:base])}/#{context[:path]}.ex"
-      end
+      "lib/#{Macro.underscore(context_inflected[:base])}/#{context_inflected[:path]}.ex"
 
     copy_template(
+      @templates_path,
       "context.eex",
       path,
-      context: context,
-      option_context: option_context,
+      context_inflected: context_inflected,
       schema: Map.merge(schema, %{alias: updated_alias, module: updated_module})
     )
   end
 
-  defp create_context_test(context, schema, option_context) do
+  defp create_context_test(context_inflected, schema) do
     updated_alias =
       schema.alias
       |> Atom.to_string()
@@ -80,59 +75,11 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResource do
       |> String.replace("Elixir.", "")
 
     path =
-      if Keyword.get(option_context, :path, false) do
-        "test/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}_test.ex"
-      else
-        "test/#{Macro.underscore(context[:base])}/#{context[:path]}_test.exs"
-      end
+      "test/#{Macro.underscore(context_inflected[:base])}/#{context_inflected[:path]}_test.exs"
 
-    copy_template("context_test.eex", path,
-      context: context,
-      option_context: option_context,
+    copy_template(@templates_path, "context_test.eex", path,
+      context_inflected: context_inflected,
       schema: Map.merge(schema, %{alias: updated_alias, module: updated_module})
     )
-  end
-
-  defp copy_template(name, final_path, opts) do
-    Path.join(:code.priv_dir(:use_case), "templates/use_case.gen.phx_resource/#{name}")
-    |> Mix.Generator.copy_template(final_path, opts)
-  end
-
-  defp get_table_name([_,table_name|_]) do
-    table_name
-  end
-
-  defp get_table_name(_) do
-    raise "Table name is obrigatory"
-  end
-
-  defp get_schema_name([schema|_], []) do
-    "Schemas.#{schema}"
-  end
-
-  defp get_schema_name([schema|_], option_context) do
-    option_context[:scoped] <> ".Schemas.#{schema}"
-  end
-
-  defp get_schema_fields([_,_|schema_fields]) do
-    schema_fields
-  end
-
-  defp get_context([schema_name|_]) do
-    call_phoenix_inflector(schema_name)
-  end
-
-  defp get_context(_) do
-    raise "Schema name is obrigatory"
-  end
-
-  defp get_option_context(nil), do: []
-
-  defp get_option_context(name) do
-    call_phoenix_inflector(name)
-  end
-
-  defp call_phoenix_inflector(name) do
-    UcScaffold.Mix.Phoenix.Inflector.call(name)
   end
 end

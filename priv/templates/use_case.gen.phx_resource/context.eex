@@ -1,16 +1,8 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.<%= @context[:scoped] %> do
-<% else %>
-defmodule <%= @context[:base] %>.<%= @context[:scoped] %> do
-<% end %>
+defmodule <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %> do
   @moduledoc false
 
-  <%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Schemas.<%= @context[:scoped] %>
-  <% else %>
-  alias <%= @context[:base] %>.Schemas.<%= @context[:scoped] %>
-  <% end %>
-  alias <%= @context[:base] %>.Repo
+  alias <%= @context_inflected[:base] %>.Schemas.<%= @schema.alias %>
+  alias <%= @context_inflected[:base] %>.Repo
 
   def list do
     Repo.all(<%= @schema.alias %>)

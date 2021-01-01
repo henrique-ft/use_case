@@ -1,8 +1,4 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.Interactors.<%= @context[:scoped] %> do
-<% else %>
-defmodule <%= @context[:base] %>.Interactors.<%= @context[:scoped] %> do
-<% end %>
+defmodule <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %> do
   @moduledoc false
 
   use UseCase.Interactor

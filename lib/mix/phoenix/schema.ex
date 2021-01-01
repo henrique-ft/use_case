@@ -1,4 +1,4 @@
-defmodule UcScaffold.Mix.Phoenix.Schema do
+defmodule UseCase.Mix.Phoenix.Schema do
   @moduledoc false
 
   defstruct module: nil,

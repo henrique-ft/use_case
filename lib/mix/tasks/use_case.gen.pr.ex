@@ -3,7 +3,7 @@ defmodule Mix.Tasks.UseCase.Gen.Pr do
 
   use Mix.Task
 
-  alias UcScaffold.Mix.Phoenix.Schema
+  alias UseCase.Mix.Phoenix.Schema
 
   def run(io_puts \\ true, args) do
     if io_puts do
