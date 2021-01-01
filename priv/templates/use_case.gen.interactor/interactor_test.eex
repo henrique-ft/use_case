@@ -1,4 +1,4 @@
-defmodule <%= @context[:base] %>.<%= @context[:scoped] %>Test do
+defmodule <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>Test do
   use ExUnit.Case, async: true
-  alias <%= @context[:base] %>.<%= @context[:scoped] %>
+  alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 end
