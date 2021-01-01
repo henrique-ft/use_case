@@ -3,8 +3,6 @@ defmodule Mix.Tasks.UseCase.Gen.Pr do
 
   use Mix.Task
 
-  alias UseCase.Mix.Phoenix.Schema
-
   def run(io_puts \\ true, args) do
     if io_puts do
       IO.puts("""

@@ -56,7 +56,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceJson do
 
     require IEx; IEx.pry
     path =
-      "lib/#{context_inflected[:web_path]}/controllers/#{context_inflected[:path]}_controller.ex"
+      "lib/#{context_inflected[:web_path]}/controllers/#{schema.singular}_controller.ex"
 
     copy_template(@template_path, "controller.eex", path,
       context_inflected: context_inflected,
@@ -71,7 +71,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceJson do
       |> String.replace("Elixir.", "")
 
     path =
-      "test/#{context_inflected[:web_path]}/controllers/#{context_inflected[:path]}_controller_test.ex"
+      "test/#{context_inflected[:web_path]}/controllers/#{schema.singular}_controller_test.ex"
 
     copy_template(@template_path, "controller_test.eex", path,
       context_inflected: context_inflected,
@@ -93,7 +93,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceJson do
       |> String.replace("Elixir.", "")
 
     path =
-        "lib/#{context_inflected[:web_path]}/views/#{context_inflected[:path]}_view.ex"
+        "lib/#{context_inflected[:web_path]}/views/#{schema.singular}_view.ex"
 
     copy_template(@template_path, "view.eex", path,
       context_inflected: context_inflected,

@@ -1,4 +1,4 @@
-defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module] |> String.replace("#{@context_inflected[:base]}.", "") %>ControllerTest do
+defmodule <%= @context_inflected[:web_module] %>.<%= @schema.alias %>ControllerTest do
   use <%= @context_inflected[:web_module] %>.ConnCase
 
   alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
@@ -60,7 +60,7 @@ defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module]
       assert redirected_to(conn) == Routes.<%= @schema.route_helper %>_path(conn, :show, <%= @schema.singular %>)
 
       conn = get(conn, Routes.<%= @schema.route_helper %>_path(conn, :show, <%= @schema.singular %>))<%= if @schema.string_attr do %>
-      assert html_response(conn, 200) =~ <%= inspect UcScaffold.Mix.Phoenix.Schema.default_param(@schema, :update) %><% else %>
+      assert html_response(conn, 200) =~ <%= inspect UseCase.Mix.Phoenix.Schema.default_param(@schema, :update) %><% else %>
       assert html_response(conn, 200)<% end %>
     end
 
