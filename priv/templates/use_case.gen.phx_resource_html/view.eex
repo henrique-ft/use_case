@@ -1,3 +1,0 @@
-defmodule <%= @context_inflected[:web_module] %>.<%= @schema.alias %>View do
-  use <%= @context_inflected[:web_module] %>, :view
-end

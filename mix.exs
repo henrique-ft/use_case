@@ -4,7 +4,7 @@ defmodule UseCase.MixProject do
   def project do
     [
       app: :use_case,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
