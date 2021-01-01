@@ -6,9 +6,9 @@ defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("
   use <%= @context[:web_module] %>, :controller
 
   <%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %>
+  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.<%= @context[:scoped] %>
   <% else %>
-  alias <%= @context[:base] %>.Repo.<%= @context[:scoped] %>
+  alias <%= @context[:base] %>.<%= @context[:scoped] %>
   <% end %>
 
   def index(conn, _params) do

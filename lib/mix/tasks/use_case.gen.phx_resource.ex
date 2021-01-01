@@ -35,13 +35,13 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResource do
 
     [_|args_without_schema] = args
 
-    create_repo(context, schema, option_context)
-    create_repo_test(context, schema, option_context)
+    create_context(context, schema, option_context)
+    create_context_test(context, schema, option_context)
 
     Mix.Tasks.Phx.Gen.Schema.run([schema_name] ++ args_without_schema)
   end
 
-  defp create_repo(context, schema, option_context) do
+  defp create_context(context, schema, option_context) do
     updated_alias =
       schema.alias
       |> Atom.to_string()
@@ -54,13 +54,13 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResource do
 
     path =
       if Keyword.get(option_context, :path, false) do
-        "lib/#{Macro.underscore(context[:base])}/#{option_context[:path]}/repo/#{context[:path]}.ex"
+        "lib/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}.ex"
       else
-        "lib/#{Macro.underscore(context[:base])}/repo/#{context[:path]}.ex"
+        "lib/#{Macro.underscore(context[:base])}/#{context[:path]}.ex"
       end
 
     copy_template(
-      "repo.eex",
+      "context.eex",
       path,
       context: context,
       option_context: option_context,
@@ -68,7 +68,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResource do
     )
   end
 
-  defp create_repo_test(context, schema, option_context) do
+  defp create_context_test(context, schema, option_context) do
     updated_alias =
       schema.alias
       |> Atom.to_string()
@@ -81,12 +81,12 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResource do
 
     path =
       if Keyword.get(option_context, :path, false) do
-        "test/#{Macro.underscore(context[:base])}/#{option_context[:path]}/repo/#{context[:path]}_test.ex"
+        "test/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}_test.ex"
       else
-        "test/#{Macro.underscore(context[:base])}/repo/#{context[:path]}_test.exs"
+        "test/#{Macro.underscore(context[:base])}/#{context[:path]}_test.exs"
       end
 
-    copy_template("repo_test.eex", path,
+    copy_template("context_test.eex", path,
       context: context,
       option_context: option_context,
       schema: Map.merge(schema, %{alias: updated_alias, module: updated_module})

@@ -1,7 +1,7 @@
 <%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %> do
+defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.<%= @context[:scoped] %> do
 <% else %>
-defmodule <%= @context[:base] %>.Repo.<%= @context[:scoped] %> do
+defmodule <%= @context[:base] %>.<%= @context[:scoped] %> do
 <% end %>
   @moduledoc false
 
