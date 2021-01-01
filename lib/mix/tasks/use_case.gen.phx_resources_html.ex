@@ -58,7 +58,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
       |> String.replace("Elixir.", "")
 
     path =
-      "lib/#{context_inflected[:web_path]}/controllers/#{context_inflected[:path]}_controller.ex"
+      "lib/#{context_inflected[:web_path]}/controllers/#{schema.singular}_controller.ex"
 
     copy_template(@template_path, "controller.eex", path,
       context_inflected: context_inflected,
@@ -73,7 +73,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
       |> String.replace("Elixir.", "")
 
     path =
-      "test/#{context_inflected[:web_path]}/controllers/#{context_inflected[:path]}_controller_test.ex"
+      "test/#{context_inflected[:web_path]}/controllers/#{schema.singular}_controller_test.ex"
 
     copy_template(@template_path, "controller_test.eex", path,
       context_inflected: context_inflected,
@@ -83,7 +83,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
 
   defp create_view(context_inflected, schema) do
     path =
-      "lib/#{context_inflected[:web_path]}/views/#{context_inflected[:path]}_view.ex"
+      "lib/#{context_inflected[:web_path]}/views/#{schema.singular}_view.ex"
 
     copy_template(@template_path, "view.eex", path,
       context_inflected: context_inflected,
@@ -93,7 +93,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
 
   defp create_edit_html(context_inflected, schema) do
     path =
-      "lib/#{context_inflected[:web_path]}/templates/#{context_inflected[:path]}/edit.html.eex"
+      "lib/#{context_inflected[:web_path]}/templates/#{schema.singular}/edit.html.eex"
 
     copy_template(@template_path, "edit.html.eex", path,
       schema: schema
@@ -102,7 +102,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
 
   defp create_form_html(context_inflected, schema) do
     path =
-      "lib/#{context_inflected[:web_path]}/templates/#{context_inflected[:path]}/form.html.eex"
+      "lib/#{context_inflected[:web_path]}/templates/#{schema.singular}/form.html.eex"
 
     copy_template(@template_path, "form.html.eex", path,
       schema: schema,
@@ -112,7 +112,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
 
   defp create_index_html(context_inflected, schema) do
     path =
-      "lib/#{context_inflected[:web_path]}/templates/#{context_inflected[:path]}/index.html.eex"
+      "lib/#{context_inflected[:web_path]}/templates/#{schema.singular}/index.html.eex"
 
     copy_template(@template_path, "index.html.eex", path,
       schema: schema
@@ -121,7 +121,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
 
   defp create_new_html(context_inflected, schema) do
     path =
-      "lib/#{context_inflected[:web_path]}/templates/#{context_inflected[:path]}/new.html.eex"
+      "lib/#{context_inflected[:web_path]}/templates/#{schema.singular}/new.html.eex"
 
     copy_template(@template_path, "new.html.eex", path,
       schema: schema
@@ -130,7 +130,7 @@ defmodule Mix.Tasks.UseCase.Gen.PhxResourceHtml do
 
   defp create_show_html(context_inflected, schema) do
     path =
-      "lib/#{context_inflected[:web_path]}/templates/#{context_inflected[:path]}/show.html.eex"
+      "lib/#{context_inflected[:web_path]}/templates/#{schema.singular}/show.html.eex"
 
     copy_template(@template_path, "show.html.eex", path,
       schema: schema

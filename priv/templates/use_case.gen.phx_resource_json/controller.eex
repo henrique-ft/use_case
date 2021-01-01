@@ -1,4 +1,4 @@
-defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module] |> String.replace("#{@context_inflected[:base]}.", "") %>Controller do
+defmodule <%= @context_inflected[:web_module] %>.<%= @schema.alias %>Controller do
   use <%= @context_inflected[:web_module] %>, :controller
   alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 
