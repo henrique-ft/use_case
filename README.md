@@ -256,14 +256,6 @@ pipe([%SayHello{name: "Henrique"}, LogOperation], my_option: true)
 
 `mix use_case.gen.interactor`
 
-`mix use_case.gen.phx_resource`
-
-`mix use_case.gen.phx_resource_html`
-
-`mix use_case.gen.phx_resource_json`
-
-`mix use_case.gen.phx_resource_temple`
-
 ## Contribute
 
 *UseCase* is not only for me, but for the *Elixir* community.
