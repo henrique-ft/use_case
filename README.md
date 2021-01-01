@@ -27,7 +27,7 @@ The package can be installed by adding `use_case` to your list of dependencies i
 ```elixir
 def deps do
   [
-    {:use_case, "~> 0.2.0"}
+    {:use_case, "~> 0.2.1"}
   ]
 end
 ```
