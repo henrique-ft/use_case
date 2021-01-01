@@ -1,9 +1,9 @@
-defmodule <%= @context_inflected[:base] %>.Repo.<%= @context_inflected[:scoped] %> do
+defmodule <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %> do
   @moduledoc false
   use <%= @context_inflected[:base] %>.DataCase, async: true
 
   describe "<%= @schema.plural %>" do
-    alias <%= @context_inflected[:base] %>.Repo.<%= @context_inflected[:scoped] %>
+    alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
     alias <%= @schema.module %>
 
     @valid_attrs <%= inspect @schema.params.create %>
