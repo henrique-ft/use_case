@@ -1,17 +1,9 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:web_module] %>.<%= @option_context[:scoped] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>ControllerTest do
-<% else %>
-defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>ControllerTest do
-<% end %>
+defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module] |> String.replace("#{@context_inflected[:base]}.", "") %>ControllerTest do
 
-  use <%= @context[:web_module] %>.ConnCase
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %>
-<% else %>
-  alias <%= @context[:base] %>.Repo.<%= @context[:scoped] %>
-<% end %>
+  use <%= @context_inflected[:web_module] %>.ConnCase
+  alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 
-  alias <%= inspect @schema.module %>, as: <%= @context[:alias] %>Schema
+  alias <%= inspect @schema.module %>, as: <%= @context_inflected[:alias] %>Schema
 
   @create_attrs %{
 <%= @schema.params.create |> Enum.map(fn {key, val} -> "    #{key}: #{inspect(val)}" end) |> Enum.join(",\n") %>
@@ -22,7 +14,7 @@ defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("
   @invalid_attrs <%= inspect for {key, _} <- @schema.params.create, into: %{}, do: {key, nil} %>
 
   def fixture(:<%= @schema.singular %>) do
-    {:ok, <%= @schema.singular %>} = <%= @context[:alias] %>.create(@create_attrs)
+    {:ok, <%= @schema.singular %>} = <%= @context_inflected[:alias] %>.create(@create_attrs)
     <%= @schema.singular %>
   end
 
@@ -59,7 +51,7 @@ defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("
   describe "update <%= @schema.singular %>" do
     setup [:create_<%= @schema.singular %>]
 
-    test "renders <%= @schema.singular %> when data is valid", %{conn: conn, <%= @schema.singular %>: %<%= @context[:alias] %>Schema{id: id} = <%= @schema.singular %>} do
+    test "renders <%= @schema.singular %> when data is valid", %{conn: conn, <%= @schema.singular %>: %<%= @context_inflected[:alias] %>Schema{id: id} = <%= @schema.singular %>} do
       conn = put(conn, Routes.<%= @schema.route_helper %>_path(conn, :update, <%= @schema.singular %>), <%= @schema.singular %>: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

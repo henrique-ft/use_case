@@ -1,26 +1,18 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:web_module] %>.<%= @option_context[:scoped] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>Controller do
-<% else %>
-defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>Controller do
-<% end %>
-  use <%= @context[:web_module] %>, :controller
+defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module] |> String.replace("#{@context_inflected[:base]}.", "") %>Controller do
+  use <%= @context_inflected[:web_module] %>, :controller
 
-  <%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %>
-  <% else %>
-  alias <%= @context[:base] %>.Repo.<%= @context[:scoped] %>
-  <% end %>
+  alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 
   def index(conn, _params) do
-    render(conn, "index.html", <%= @schema.plural %>: <%= @context[:alias] %>.list)
+    render(conn, "index.html", <%= @schema.plural %>: <%= @context_inflected[:alias] %>.list)
   end
 
   def new(conn, _params) do
-    render(conn, "new.html", changeset: <%= @context[:alias] %>.new_changeset)
+    render(conn, "new.html", changeset: <%= @context_inflected[:alias] %>.new_changeset)
   end
 
   def create(conn, %{<%= inspect @schema.singular %> => <%= @schema.singular %>_params}) do
-    case <%= @context[:alias] %>.create(<%= @schema.singular %>_params) do
+    case <%= @context_inflected[:alias] %>.create(<%= @schema.singular %>_params) do
       {:ok, <%= @schema.singular %>} ->
         conn
         |> put_flash(:info, gettext("<%= @schema.human_singular %> created successfully."))
@@ -32,19 +24,19 @@ defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("
   end
 
   def show(conn, %{"id" => id}) do
-    render(conn, "show.html", <%= @schema.singular %>: <%= @context[:alias] %>.get!(id))
+    render(conn, "show.html", <%= @schema.singular %>: <%= @context_inflected[:alias] %>.get!(id))
   end
 
   def edit(conn, %{"id" => id}) do
-    <%= @schema.singular %> = <%= @context[:alias] %>.get!(id)
-    changeset = <%= @context[:alias] %>.edit_changeset(<%= @schema.singular %>)
+    <%= @schema.singular %> = <%= @context_inflected[:alias] %>.get!(id)
+    changeset = <%= @context_inflected[:alias] %>.edit_changeset(<%= @schema.singular %>)
     render(conn, "edit.html", <%= @schema.singular %>: <%= @schema.singular %>, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, <%= inspect @schema.singular %> => <%= @schema.singular %>_params}) do
-    <%= @schema.singular %> = <%= @context[:alias] %>.get!(id)
+    <%= @schema.singular %> = <%= @context_inflected[:alias] %>.get!(id)
 
-    case <%= @context[:alias] %>.update(<%= @schema.singular %>, <%= @schema.singular %>_params) do
+    case <%= @context_inflected[:alias] %>.update(<%= @schema.singular %>, <%= @schema.singular %>_params) do
       {:ok, <%= @schema.singular %>} ->
         conn
         |> put_flash(:info, gettext("<%= @schema.human_singular %> updated successfully."))
@@ -56,7 +48,7 @@ defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("
   end
 
   def delete(conn, %{"id" => id}) do
-    {:ok, _<%= @schema.singular %>} = <%= @context[:alias] %>.delete(<%= @context[:alias] %>.get!(id))
+    {:ok, _<%= @schema.singular %>} = <%= @context_inflected[:alias] %>.delete(<%= @context_inflected[:alias] %>.get!(id))
 
     conn
     |> put_flash(:info, gettext("<%= @schema.human_singular %> deleted successfully."))

@@ -1,12 +1,4 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:base] %>.<%= @option_context[:scoped] %>.<%= @context[:scoped] %>Test do
-<% else %>
-defmodule <%= @context[:base] %>.<%= @context[:scoped] %>Test do
-<% end %>
+defmodule <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>Test do
   use ExUnit.Case, async: true
-  <%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.<%= @context[:scoped] %>
-  <% else %>
-  alias <%= @context[:base] %>.<%= @context[:scoped] %>
-  <% end %>
+  alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 end

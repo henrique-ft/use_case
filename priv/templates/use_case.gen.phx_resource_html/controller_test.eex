@@ -1,22 +1,14 @@
-<%= if Keyword.get(@option_context, :scoped, false) do %>
-defmodule <%= @context[:web_module] %>.<%= @option_context[:scoped] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>ControllerTest do
-<% else %>
-defmodule <%= @context[:web_module] %>.<%= @context[:module] |> String.replace("#{@context[:base]}.", "") %>ControllerTest do
-<% end %>
-  use <%= @context[:web_module] %>.ConnCase
+defmodule <%= @context_inflected[:web_module] %>.<%= @context_inflected[:module] |> String.replace("#{@context_inflected[:base]}.", "") %>ControllerTest do
+  use <%= @context_inflected[:web_module] %>.ConnCase
 
-  <%= if Keyword.get(@option_context, :scoped, false) do %>
-  alias <%= @context[:base] %>.<%= @option_context[:scoped] %>.Repo.<%= @context[:scoped] %>
-  <% else %>
-  alias <%= @context[:base] %>.Repo.<%= @context[:scoped] %>
-  <% end %>
+  alias <%= @context_inflected[:base] %>.<%= @context_inflected[:scoped] %>
 
   @create_attrs <%= inspect @schema.params.create %>
   @update_attrs <%= inspect @schema.params.update %>
   @invalid_attrs <%= inspect for {key, _} <- @schema.params.create, into: %{}, do: {key, nil} %>
 
   def fixture(:<%= @schema.singular %>) do
-    {:ok, <%= @schema.singular %>} = <%= @context[:alias] %>.create(@create_attrs)
+    {:ok, <%= @schema.singular %>} = <%= @context_inflected[:alias] %>.create(@create_attrs)
     <%= @schema.singular %>
   end
 

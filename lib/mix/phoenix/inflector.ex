@@ -1,4 +1,4 @@
-defmodule UcScaffold.Mix.Phoenix.Inflector do
+defmodule UseCase.Mix.Phoenix.Inflector do
   @moduledoc false
 
   @doc """

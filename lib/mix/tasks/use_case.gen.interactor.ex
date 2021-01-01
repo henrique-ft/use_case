@@ -5,15 +5,14 @@ defmodule Mix.Tasks.UseCase.Gen.Interactor do
 
         mix use_case.gen.interactor DoSomething.Cool
 
-    or
-
-        mix use_case.gen.interactor DoSomething.Cool
-
     The first argument is the interactor name.
   """
 
-
   use Mix.Task
+
+  import UseCase.Mix.Helpers
+
+  @template_path "use_case.gen.interactor"
 
   def run(io_puts \\ true, args_and_options) do
     if io_puts do
@@ -23,67 +22,35 @@ defmodule Mix.Tasks.UseCase.Gen.Interactor do
         """)
     end
 
-    {options, args, []} = OptionParser.parse(args_and_options, strict: [context: :string])
+    args = parse_args(args_and_options)
 
-    option_context = get_option_context(Keyword.get(options, :context, nil))
-    context = get_context(args)
+    context_inflected = get_context_inflected(args)
 
-    create_interactor(context, option_context)
-    create_interactor_test(context, option_context)
+    create_interactor(context_inflected)
+    create_interactor_test(context_inflected)
   end
 
-  defp create_interactor(context, option_context) do
+  defp create_interactor(context_inflected) do
     path =
-      if Keyword.get(option_context, :path, false) do
-        "lib/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}.ex"
-      else
-        "lib/#{Macro.underscore(context[:base])}/#{context[:path]}.ex"
-      end
+      "lib/#{Macro.underscore(context_inflected[:base])}/#{context_inflected[:path]}.ex"
 
     copy_template(
+      @template_path,
       "interactor.eex",
       path,
-      option_context: option_context,
-      context: context
+      context_inflected: context_inflected
     )
   end
 
-  defp create_interactor_test(context, option_context) do
+  defp create_interactor_test(context_inflected) do
     path =
-      if Keyword.get(option_context, :path, false) do
-        "test/#{Macro.underscore(context[:base])}/#{option_context[:path]}/#{context[:path]}_test.ex"
-      else
-        "test/#{Macro.underscore(context[:base])}/#{context[:path]}_test.ex"
-      end
+      "test/#{Macro.underscore(context_inflected[:base])}/#{context_inflected[:path]}_test.ex"
 
     copy_template(
+      @template_path,
       "interactor_test.eex",
       path,
-      option_context: option_context,
-      context: context
+      context_inflected: context_inflected
     )
-  end
-
-  defp copy_template(name, final_path, opts) do
-    Path.join(:code.priv_dir(:use_case), "templates/use_case.gen.interactor/#{name}")
-    |> Mix.Generator.copy_template(final_path, opts)
-  end
-
-  defp get_context([schema_name|_]) do
-    call_phoenix_inflector(schema_name)
-  end
-
-  defp get_context(_) do
-    raise "Schema name is obrigatory"
-  end
-
-  defp get_option_context(nil), do: []
-
-  defp get_option_context(name) do
-    call_phoenix_inflector(name)
-  end
-
-  defp call_phoenix_inflector(name) do
-    UcScaffold.Mix.Phoenix.Inflector.call(name)
   end
 end
